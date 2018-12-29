@@ -1,0 +1,16 @@
+{
+    "name": "chess-alpha-beta-min-max",
+    "version": "1.0.0",
+    "description": "Simple Chess bot",
+    "main": "index.html",
+    "scripts": {
+      "start": "parcel index.html ",
+      "build": "parcel build index.html",
+      "run": "node index.hmtl"
+    },
+    "dependencies": {},
+    "devDependencies": {
+      "@babel/core": "7.2.0",
+      "parcel-bundler": "1.6.1"
+    }
+  }
