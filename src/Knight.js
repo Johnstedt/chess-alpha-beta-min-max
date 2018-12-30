@@ -1,11 +1,10 @@
 import { Piece } from './Piece'
 
-export class King extends Piece {
+export class Knight extends Piece {
 
     constructor(x, y, color, place, move) {
         super(x, y, color, place, move);
-        this.image = document.getElementById("king_" + color);
-
+        this.image = document.getElementById("knight_" + color);
     }
 
     getImage() {
@@ -21,12 +20,14 @@ export class King extends Piece {
             }
         }
 
-        //Move in every direction one step
-        if (Math.abs(this.x - x) < 2 && Math.abs(this.y - y) < 2) {
+        if( ( Math.abs(this.x - x) == 2 && Math.abs(this.y - y) == 1 ) 
+            ||  (Math.abs(this.y - y) == 2 &&  Math.abs(this.x - x) == 1 ) ){
+
             this.x = x;
             this.y = y;
-            return true
+            return true;
         }
+
         return false
     }
 

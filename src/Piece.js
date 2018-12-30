@@ -2,9 +2,10 @@ import CONSTANTS from './config'
 
 export class Piece {
 
-    constructor(xAxel, yAxel, place, move) {
+    constructor(xAxel, yAxel, color, place, move) {
         this.image = document.getElementById("king_white"); // default 
         this.board = document.getElementById("chessBoard");
+        this.color = color;
         this.x = xAxel;
         this.y = yAxel;
         this.isDraggable = false;
@@ -35,8 +36,8 @@ export class Piece {
 
             if (mouseX >= (self.x * CONSTANTS.BOARD_SIZE / 8) &&
                 mouseX < ((self.x + 1) * CONSTANTS.BOARD_SIZE / 8) &&
-                mouseY >= ( (8 - self.y) * CONSTANTS.BOARD_SIZE /8) &&
-                mouseY < (( (8 - self.y) + 1) * CONSTANTS.BOARD_SIZE / 8) ) {
+                mouseY >= ( (7 - self.y) * CONSTANTS.BOARD_SIZE /8) &&
+                mouseY < (( (7 - self.y) + 1) * CONSTANTS.BOARD_SIZE / 8) ) {
                 self.isDraggable = true;
             }
         });
@@ -44,9 +45,9 @@ export class Piece {
         this.board.addEventListener("mouseup", function (e) {
             if(self.isDraggable){
                 self.isDraggable = false;
-                self.place(self.x, self.y, Math.floor(self.currentX / (CONSTANTS.BOARD_SIZE / 8) ), 8 - Math.floor(self.currentY / (CONSTANTS.BOARD_SIZE / 8) ) )
-                self.x = Math.floor(self.currentX / (CONSTANTS.BOARD_SIZE / 8))
-                self.y = 8 - Math.floor(self.currentY / (CONSTANTS.BOARD_SIZE / 8))
+                self.place(self.x, self.y, Math.floor(self.currentX / (CONSTANTS.BOARD_SIZE / 8) ), 7 - Math.floor(self.currentY / (CONSTANTS.BOARD_SIZE / 8) ) )
+                //self.x = Math.floor(self.currentX / (CONSTANTS.BOARD_SIZE / 8))
+                //self.y = 8 - Math.floor(self.currentY / (CONSTANTS.BOARD_SIZE / 8))
             }
         });
 
