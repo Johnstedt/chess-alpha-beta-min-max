@@ -7,7 +7,6 @@ var BOARD_SIZE = 700;
 let chessBoard = document.getElementById("chessBoard");
 var context = chessBoard.getContext("2d");
 
-
 function paintBoard(){
     for(let i = 0; i < 8; i++){
         for(let j = 0; j < 8; j++){
@@ -23,6 +22,7 @@ function paintBoard(){
         } 
     }
 }
+
 let board = [];
 for(let i=0; i<9; i++) {
     board[i] = [];
@@ -31,14 +31,47 @@ for(let i=0; i<9; i++) {
     }
 }
 
-board[2][4] = new King("white");
+var x = -1;
+var y = -1;
+var cur_x = -1
+var cur_y = -1
+
+var move = (x_n, y_n, cur_x_n, cur_y_n) => {
+    x = x_n
+    y = y_n
+    cur_x = cur_x_n
+    cur_y = cur_y_n
+}
+
+var place = (x_old, y_old, x_new, y_new) => {
+   
+    let temp = board[x_old][y_old]
+    board[x_old][y_old] = null  
+    board[x_new][y_new] = temp
+    x = -1;
+    y = -1
+    cur_x = -1
+    cur_y = -1
+}
+
+board[2][4] = new King(2, 4, "white", place, move);
 
 var king_white = document.getElementById("king_white");
-placePiece(2, 4);
 
-function placePiece(x, y){
-    
-    context.drawImage(king_white, x * BOARD_SIZE / 8 , y * BOARD_SIZE / 8, BOARD_SIZE / 8, BOARD_SIZE / 8);
+function placePieces(){
+    for(let i=0; i < 8; i++) {
+        for(let j=0; j < 8; j++) {
+            if(board[i][j] != null){
+
+                if(x == i && y == j){
+                    context.drawImage(board[i][j].getImage(), cur_x - (BOARD_SIZE / 16) , cur_y - (BOARD_SIZE / 16), BOARD_SIZE / 8, BOARD_SIZE / 8);
+                }
+                else {
+                    context.drawImage(board[i][j].getImage(), (i) * BOARD_SIZE / 8 , (8-j) * BOARD_SIZE / 8, BOARD_SIZE / 8, BOARD_SIZE / 8);
+                }
+            }
+        }
+    }
 }
 
 var currentX = chessBoard.width/2;
@@ -49,48 +82,12 @@ function DrawImage() {
     context.drawImage(king_white, currentX-(king_white.width/2), currentY-(king_white.height/2, BOARD_SIZE / 8, BOARD_SIZE / 8));
   }
 
-  _Go();
+  play();
   
-function _Go() {
-    _MouseEvents();
+function play() {
   
     setInterval(function() {
-     // _ResetchessBoard()
       paintBoard();
-      DrawImage();
-    }, 1000/10);
+      placePieces();
+    }, 1000/15);
   }
-
-  function _ResetchessBoard() {
-    context.fillStyle = '#fff';
-    context.fillRect(0,0, chessBoard.width, chessBoard.height);
-  }
-
-function _MouseEvents(){
-
-    chessBoard.onmousedown = function(e) {
-        var mouseX = e.pageX - this.offsetLeft;
-        var mouseY = e.pageY - this.offsetTop;
-    
-        if (mouseX >= (currentX - king_white.width/2) &&
-            mouseX <= (currentX + king_white.width/2) &&
-            mouseY >= (currentY - king_white.height/2) &&
-            mouseY <= (currentY + king_white.height/2)) {
-          isDraggable = true;
-        }
-    };
-    chessBoard.onmouseup = function(e) {
-        isDraggable = false;
-    };
-
-    chessBoard.onmouseout = function(e) {
-        isDraggable = false;
-    };
-
-  chessBoard.onmousemove = function(e) {
-    if (isDraggable) {
-       currentX = e.pageX - this.offsetLeft;
-       currentY = e.pageY - this.offsetTop;
-     }
-  };
-}

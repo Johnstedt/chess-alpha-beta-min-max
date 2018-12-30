@@ -5,8 +5,7 @@
     "main": "index.html",
     "scripts": {
       "start": "parcel index.html ",
-      "build": "parcel build index.html",
-      "run": "node index.hmtl"
+      "build": "parcel build index.html"
     },
     "dependencies": {},
     "devDependencies": {
