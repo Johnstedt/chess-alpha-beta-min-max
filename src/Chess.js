@@ -1,11 +1,13 @@
 import "./styles.css";
 
-import { King } from './King'
-import { Queen } from './Queen'
-import { Rock } from './Rock'
-import { Bishop } from './Bishop'
-import { Knight } from './Knight'
-import { Pawn } from './Pawn'
+import { King } from './pieces/King'
+import { Queen } from './pieces/Queen'
+import { Rock } from './pieces/Rock'
+import { Bishop } from './pieces/Bishop'
+import { Knight } from './pieces/Knight'
+import { Pawn } from './pieces/Pawn'
+
+import { Evaluator } from './Evaluator'
 import CONSTANTS from './config'
 
 export class Chess {
@@ -14,6 +16,7 @@ export class Chess {
         this.chessBoard = document.getElementById("chessBoard");
         this.context = chessBoard.getContext("2d");
         this.board = this.createBoard()
+        this.evaluator = new Evaluator();
 
         this.x = -1;
         this.y = -1;
@@ -23,6 +26,8 @@ export class Chess {
         this.turn = 0;
 
         this.initiatePiecesForGame()
+
+        this.score = 0;
     }
 
     play() {
@@ -52,7 +57,6 @@ export class Chess {
                 this.board[x_new][y_new] = temp
 
                 this.turn++;
-
             }
             else if (type_move === "passant_white") {
 
@@ -123,6 +127,10 @@ export class Chess {
 
                 this.board[x_new + 1][y_new].x = x_new + 1;
                 this.turn++;
+            }
+
+            if(type_move !== false){
+                this.score = this.evaluator.evaluateBoard(this.board).boardScore
             }
         }
         this.x = -1;
@@ -205,7 +213,6 @@ export class Chess {
                 break;
 
         }
-
     }
 
     paintBoard() {
@@ -222,6 +229,12 @@ export class Chess {
                 this.context.fillRect(i * CONSTANTS.BOARD_SIZE / 8, j * CONSTANTS.BOARD_SIZE / 8, CONSTANTS.BOARD_SIZE / 8, CONSTANTS.BOARD_SIZE / 8)
             }
         }
+        this.context.fillStyle = "#2b2b2b"
+        this.context.fillRect(0, CONSTANTS.BOARD_SIZE, CONSTANTS.BOARD_SIZE, 15 )
+        this.context.font = "12px Arial";
+        this.context.fillStyle = "#fff"
+        this.context.fillText(" Score: " + this.score, 0, CONSTANTS.BOARD_SIZE+12);
+        
     }
 
     createBoard() {

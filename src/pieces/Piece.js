@@ -1,5 +1,8 @@
-import CONSTANTS from './config'
+import CONSTANTS from '../config'
 
+/**
+ * Class supposed to only be used by inheritance.
+ */
 export class Piece {
 
     constructor(xAxel, yAxel, color, place, move) {
@@ -18,10 +21,16 @@ export class Piece {
         return this.image;
     }
 
-    isLegalMove(){
-        // Overwrite this method in inherited classes
+    // Overwrite this method in inherited classes
+    isLegalMove(board, x, y){
         console.error("This method is supposed to be overwritten by inherited class");
         return true;
+    }
+
+    // Overwrite this method in inherited classes
+    getAllLegalMoves(board){
+        console.error("This method is supposed to be overwritten by inherited class");
+        return [];
     }
 
     mouseEvents() {
@@ -45,9 +54,7 @@ export class Piece {
         this.board.addEventListener("mouseup", function (e) {
             if(self.isDraggable){
                 self.isDraggable = false;
-                self.place(self.x, self.y, Math.floor(self.currentX / (CONSTANTS.BOARD_SIZE / 8) ), 7 - Math.floor(self.currentY / (CONSTANTS.BOARD_SIZE / 8) ) )
-                //self.x = Math.floor(self.currentX / (CONSTANTS.BOARD_SIZE / 8))
-                //self.y = 8 - Math.floor(self.currentY / (CONSTANTS.BOARD_SIZE / 8))
+                self.place(self.x, self.y, Math.floor(self.currentX / (CONSTANTS.BOARD_SIZE / 8) ), 7 - Math.floor(self.currentY / (CONSTANTS.BOARD_SIZE / 8) ) );
             }
         });
 
@@ -63,7 +70,7 @@ export class Piece {
             if (self.isDraggable) {
                 self.currentX = e.pageX - this.offsetLeft;
                 self.currentY = e.pageY - this.offsetTop;   
-                self.move(self.x, self.y, self.currentX, self.currentY)
+                self.move(self.x, self.y, self.currentX, self.currentY);
             }
         });   
     }

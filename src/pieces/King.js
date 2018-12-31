@@ -30,6 +30,7 @@ export class King extends Piece {
             return true
         }
 
+        //Castle white king side
         if(this.moves === 0 && x === 6 && !board[5][0] && !board[6][0] && board[7][0] ){
             if(board[7][0].constructor.name === "Rock"){
                 this.x = x;
@@ -39,6 +40,7 @@ export class King extends Piece {
             }
         }
 
+        //Castle black king side
         if(this.moves === 0 && x === 6 && !board[5][7] && !board[6][7] && board[7][7] ){
             if(board[7][7].constructor.name === "Rock"){
                 this.x = x;
@@ -48,6 +50,7 @@ export class King extends Piece {
             }
         }
 
+        //Castle white queeen side
         if(this.moves === 0 && x === 2 && !board[3][0] && !board[2][0] && !board[1][0] && board[0][0] ){
             if(board[0][0].constructor.name === "Rock"){
                 this.x = x;
@@ -57,6 +60,7 @@ export class King extends Piece {
             }
         }
         
+        //Castle black queen side
         if(this.moves === 0 && x === 2 && !board[3][7] && !board[2][7] && !board[1][7] && board[0][7] ){
             if(board[0][7].constructor.name === "Rock"){
                 this.x = x;
