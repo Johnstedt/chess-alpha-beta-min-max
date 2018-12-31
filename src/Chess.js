@@ -20,6 +20,8 @@ export class Chess {
         this.cur_x = -1
         this.cur_y = -1
 
+        this.turn = 0;
+
         this.initiatePiecesForGame()
     }
 
@@ -30,7 +32,7 @@ export class Chess {
         }, 1000 / 15);
     }
 
-    move (x_n, y_n, cur_x_n, cur_y_n)  {
+    move(x_n, y_n, cur_x_n, cur_y_n) {
         this.x = x_n
         this.y = y_n
         this.cur_x = cur_x_n
@@ -41,39 +43,88 @@ export class Chess {
 
         let temp = this.board[x_old][y_old]
 
-        if (temp.isLegalMove(this.board, x_new, y_new) === true) {
+        if (this.turn % 2 === 0 && temp.color === "white" || this.turn % 2 === 1 && temp.color === "black" ){
 
-            this.board[x_old][y_old] = null
-            this.board[x_new][y_new] = temp
+            let type_move = temp.isLegalMove(this.board, x_new, y_new);
+            if (type_move === true) {
 
+                this.board[x_old][y_old] = null
+                this.board[x_new][y_new] = temp
+
+                this.turn++;
+
+            }
+            else if (type_move === "passant_white") {
+
+                this.board[x_old][y_old] = null
+                this.board[x_new][y_new - 1] = null
+                this.board[x_new][y_new] = temp
+
+                this.board[x_new][y_new].x = x_new
+                this.board[x_new][y_new].y = y_new
+
+                this.turn++;
+
+            } else if (type_move === "passant_black") {
+
+                this.board[x_old][y_old] = null
+                this.board[x_new][y_new + 1] = null
+                this.board[x_new][y_new] = temp
+
+                this.board[x_new][y_new].x = x_new
+                this.board[x_new][y_new].y = y_new
+
+                this.turn++;
+            }
+            else if (type_move === "queen_white") {
+                this.board[x_old][y_old] = null
+                this.board[x_new][y_new] = new Queen(x_new, y_new, "white", this.place.bind(this), this.move.bind(this));
+
+                this.turn++;
+            }
+            else if (type_move === "queen_black") {
+                this.board[x_old][y_old] = null
+                this.board[x_new][y_new] = new Queen(x_new, y_new, "black", this.place.bind(this), this.move.bind(this));
+                this.turn++;
+            }
+            else if (type_move === "white_king_side") {
+                
+                this.board[x_new][y_new] = this.board[x_old][y_old]
+                this.board[x_new - 1][y_new] = this.board[7][0]  
+                this.board[x_old][y_old] = null
+                this.board[7][0] = null
+
+                this.board[x_new - 1][y_new].x = x_new - 1;
+                this.turn++;
+            }
+            else if (type_move === "black_king_side") {
+                this.board[x_new][y_new] = this.board[x_old][y_old]
+                this.board[x_new - 1][y_new] = this.board[7][7]  
+                this.board[x_old][y_old] = null
+                this.board[7][7] = null
+
+                this.board[x_new - 1][y_new].x = x_new - 1;
+                this.turn++;
+            }
+            else if (type_move === "white_queen_side") {
+                this.board[x_new][y_new] = this.board[x_old][y_old]
+                this.board[x_new + 1][y_new] = this.board[0][0]  
+                this.board[x_old][y_old] = null
+                this.board[0][0] = null
+
+                this.board[x_new + 1][y_new].x = x_new + 1;
+                this.turn++;
+            }
+            else if (type_move === "black_queen_side") {
+                this.board[x_new][y_new] = this.board[x_old][y_old]
+                this.board[x_new + 1][y_new] = this.board[0][7]  
+                this.board[x_old][y_old] = null
+                this.board[0][7] = null
+
+                this.board[x_new + 1][y_new].x = x_new + 1;
+                this.turn++;
+            }
         }
-        else if(temp.isLegalMove(this.board, x_new, y_new) === "passant_white"){
-
-            this.board[x_old][y_old] = null
-            this.board[x_new][y_new - 1] = null
-            this.board[x_new][y_new] = temp
-
-            this.board[x_new][y_new].x = x_new
-            this.board[x_new][y_new].y = y_new
-
-        } else if(temp.isLegalMove(this.board, x_new, y_new) === "passant_black"){
-
-            this.board[x_old][y_old] = null
-            this.board[x_new][y_new + 1] = null
-            this.board[x_new][y_new] = temp
-
-            this.board[x_new][y_new].x = x_new
-            this.board[x_new][y_new].y = y_new
-        }
-        else if(temp.isLegalMove(this.board, x_new, y_new) === "queen_white"){
-            this.board[x_old][y_old] = null
-            this.board[x_new][y_new] = new Queen(x_new, y_new, "white", this.place.bind(this), this.move.bind(this));
-        }
-        else if(temp.isLegalMove(this.board, x_new, y_new) === "queen_black"){
-            this.board[x_old][y_old] = null
-            this.board[x_new][y_new] = new Queen(x_new, y_new, "black", this.place.bind(this), this.move.bind(this));
-        }
-
         this.x = -1;
         this.y = -1
         this.cur_x = -1
@@ -96,7 +147,7 @@ export class Chess {
         }
     }
 
-    initiatePiecesForGame(){
+    initiatePiecesForGame() {
         this.createPiece(4, 0, "white", "king")
         this.createPiece(4, 7, "black", "king")
         this.createPiece(0, 0, "white", "rock")
@@ -132,8 +183,8 @@ export class Chess {
         this.createPiece(7, 6, "black", "pawn")
     }
 
-    createPiece(x, y, color, type){
-        switch(type){
+    createPiece(x, y, color, type) {
+        switch (type) {
             case "king":
                 this.board[x][y] = new King(x, y, color, this.place.bind(this), this.move.bind(this));
                 break;
@@ -152,9 +203,9 @@ export class Chess {
             case "pawn":
                 this.board[x][y] = new Pawn(x, y, color, this.place.bind(this), this.move.bind(this));
                 break;
- 
+
         }
-        
+
     }
 
     paintBoard() {
