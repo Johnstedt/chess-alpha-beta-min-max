@@ -28,7 +28,7 @@ export class Piece {
     }
 
     // Overwrite this method in inherited classes
-    getAllLegalMoves(board){
+    getAllLegalMoves(board, score){
         console.error("This method is supposed to be overwritten by inherited class");
         return [];
     }
@@ -73,5 +73,30 @@ export class Piece {
                 self.move(self.x, self.y, self.currentX, self.currentY);
             }
         });   
+    }
+
+    getScoreChange(piece) {
+        if (this.color === "white") {
+            return this.getPieceValue(piece);
+        } else {
+            return 0 - this.getPieceValue(piece);
+        }
+    }
+
+    getPieceValue(piece){
+        switch(piece.constructor.name){
+            case "Pawn":
+                return 1;
+            case "Knight":
+                return 3;
+            case "Bishop":
+                return 3;
+            case "Rock":
+                return 5;
+            case "Queen":
+                return 9;    
+            case "King":
+                return 40;
+        }
     }
 }

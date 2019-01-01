@@ -1,8 +1,6 @@
 export class Evaluator {
 
-    constructor(){
-
-    }
+    constructor(){}
 
     evaluateBoard(board){
         let obj = {};
@@ -17,7 +15,6 @@ export class Evaluator {
                     if(board[i][j].color === "white"){
                         whitePieces.push(board[i][j])
                         whiteScore += this.getPieceValue(board[i][j])
-                        console.log(whiteScore)
                     } else {
                         blackPieces.push(board[i][j])
                         blackScore += this.getPieceValue(board[i][j])
@@ -29,8 +26,6 @@ export class Evaluator {
         obj.whitePieces = whitePieces;
         obj.blackPieces = blackPieces;
         obj.boardScore = whiteScore - blackScore;
-
-        console.log(obj.boardScore)
 
         return obj;
     }
@@ -50,8 +45,19 @@ export class Evaluator {
             case "King":
                 return 40;
         }
-
     }
 
+    getBestMove(board, depth, turn){
+        let obj = this.evaluateBoard(board)
+        this.getAllLegalMoves(board, obj.blackPieces, obj.boardScore)
+        
+    }
 
+    getAllLegalMoves(board, pieces, score){
+        let boards = [];
+        for(let i = 0; i < pieces.length; i++){
+            boards = boards.concat(pieces[i].getAllLegalMoves(board, score))
+        }
+        console.log(boards)
+    }
 }

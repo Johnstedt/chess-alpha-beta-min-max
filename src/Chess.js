@@ -24,10 +24,9 @@ export class Chess {
         this.cur_y = -1
 
         this.turn = 0;
+        this.score = 0;
 
         this.initiatePiecesForGame()
-
-        this.score = 0;
     }
 
     play() {
@@ -137,6 +136,9 @@ export class Chess {
         this.y = -1
         this.cur_x = -1
         this.cur_y = -1
+
+        this.evaluator.getBestMove(this.board, 4, this.turn);
+
     }
 
     placePieces() {
@@ -219,10 +221,8 @@ export class Chess {
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
                 if ((i + j) % 2 == 0) {
-
                     this.context.fillStyle = "#ffffff";
                 } else {
-
                     this.context.fillStyle = "#8B4513";
                 }
 
@@ -233,8 +233,7 @@ export class Chess {
         this.context.fillRect(0, CONSTANTS.BOARD_SIZE, CONSTANTS.BOARD_SIZE, 15 )
         this.context.font = "12px Arial";
         this.context.fillStyle = "#fff"
-        this.context.fillText(" Score: " + this.score, 0, CONSTANTS.BOARD_SIZE+12);
-        
+        this.context.fillText(" Score: " + this.score + "     Depth: 4", 0, CONSTANTS.BOARD_SIZE+12);   
     }
 
     createBoard() {

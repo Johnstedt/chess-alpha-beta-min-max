@@ -60,4 +60,50 @@ export class Bishop extends Piece {
         return false
     }
 
+    getAllLegalMoves(board, score){
+         let boards = [];
+         this.getFromDirection(board, boards, score, 1, 1);
+         this.getFromDirection(board, boards, score, 1, -1);
+         this.getFromDirection(board, boards, score, -1, 1);
+         this.getFromDirection(board, boards, score, -1, -1);
+        return boards;
+    }
+
+    getFromDirection(board, boards, score, xDir, yDir){
+        let x = this.x;
+        let y = this.y;
+
+        x += xDir;
+        y += yDir;
+        while ( x >= 0 && y >= 0 && x <= 7 && y <= 7) {
+            console.log("loop " + x + " "+y)
+            if (board[x][y]) {
+
+                if (board[x][y].color !== this.color) {
+
+                    let p_score = score + this.getScoreChange(board[x][y])
+                    let p_board = JSON.parse(JSON.stringify(board));
+                    p_board[x][y] = p_board[this.x][y]
+                    p_board[this.x][y] = null;
+                    boards.push({
+                        score: p_score,
+                        board: p_board
+                    });
+                }
+                break;
+            } else {
+
+                let p_board = JSON.parse(JSON.stringify(board));
+                p_board[x][y] = p_board[this.x][y]
+                p_board[this.x][y] = null;
+                boards.push({
+                    score: score,
+                    board: p_board
+                });
+            }
+            x += xDir;
+            y += yDir;
+        }
+    }
+
 }
