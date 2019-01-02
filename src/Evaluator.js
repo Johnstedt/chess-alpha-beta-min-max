@@ -1,36 +1,20 @@
 import {deepCopy} from './pieces/copyPiece'
+import {calculateMove, evaluateBoard} from './calculateMove'
+
+import { King } from './pieces/King'
+import { Queen } from './pieces/Queen'
+import { Rock } from './pieces/Rock'
+import { Bishop } from './pieces/Bishop'
+import { Knight } from './pieces/Knight'
+import { Pawn } from './pieces/Pawn'
 
 export class Evaluator {
 
-    constructor() { }
+    constructor(place, move) {
+        this.place = place
+        this.move = move
+     }
 
-    evaluateBoard(board) {
-        let obj = {};
-        let whiteScore = 0;
-        let blackScore = 0;
-        let blackPieces = [];
-        let whitePieces = [];
-
-        for (let i = 0; i < 8; i++) {
-            for (let j = 0; j < 8; j++) {
-                if (board[i][j]) {
-                    if (board[i][j].color === "white") {
-                        whitePieces.push(board[i][j])
-                        whiteScore += this.getPieceValue(board[i][j])
-                    } else {
-                        blackPieces.push(board[i][j])
-                        blackScore += this.getPieceValue(board[i][j])
-                    }
-                }
-            }
-        }
-
-        obj.whitePieces = whitePieces;
-        obj.blackPieces = blackPieces;
-        obj.boardScore = whiteScore - blackScore;
-
-        return obj;
-    }
 
     getPieceValue(piece) {
         switch (piece.constructor.name) {
@@ -49,15 +33,19 @@ export class Evaluator {
         }
     }
 
-    getBestMove(board, depth, turn) {
-        let obj = this.evaluateBoard(board)
+    getBestMove(board, depth, turn){
+        let nBoard = this.convertBoardFromUI(board)
+        return this.convertBoardToUI(this.getBestMoveRec(nBoard, depth, turn))
+    }
+
+    getBestMoveRec(board, depth, turn) {
+        
+        
         var boards = [];
         var tempBoards = [];
-        if(turn % 2 === 1){
-            boards = this.getAllLegalMoves(board, obj.blackPieces, obj.boardScore)
-        } else {
-            boards = this.getAllLegalMoves(board, obj.whitePieces, obj.boardScore)
-        }
+        
+        boards = calculateMove(board, turn)
+        
         
         let firstBoard = [];
         let worstScore;
@@ -65,9 +53,9 @@ export class Evaluator {
 
         if(depth > 0){
             for (let i = 0; i < boards.length; i++) {
-                firstBoard[i] = deepCopy(boards[i].board)
+                firstBoard[i] = JSON.parse(JSON.stringify(boards[i].board))
                 console.log(i)
-                tempBoards.push(this.getBestMove(boards[i].board, depth -1, turn +1))
+                tempBoards.push(this.getBestMoveRec(boards[i].board, depth -1, turn +1))
             }
             boards = tempBoards;
         }
@@ -78,7 +66,7 @@ export class Evaluator {
         }
 
         if (turn % 2 === 1) { //MIN
-            worstScore = 200;
+            worstScore = 2000;
             winning = null
 
             for (let i = 0; i < boards.length; i++) {
@@ -89,7 +77,7 @@ export class Evaluator {
             }
         }
         else { // MAX
-            worstScore = -200;
+            worstScore = -2000;
             winning = null
             for (let i = 0; i < boards.length; i++) {
                 if (boards[i].score > worstScore) {
@@ -97,9 +85,9 @@ export class Evaluator {
                     worstScore = boards[i].score
                 }
             }
-
         }
         if(depth > 0){
+            console.log("Finaley")
             console.log(firstBoard[winning])
             return firstBoard[winning]
         } else {
@@ -114,5 +102,96 @@ export class Evaluator {
         }
         
         return boards
+    }
+
+    convertBoardFromUI(board){
+        let newB = [];
+        for(let i = 0; i < board.length; i++){
+            newB[i] = []
+            for(let j = 0; j < board.length; j++){
+                if(board[i][j]){
+                    newB[i][j] = this.getLetterFromPiece(board[i][j])
+                } else{
+                    board[i][j] = null;
+                }
+            }
+        }
+        return newB
+    }
+
+    convertBoardToUI(board){
+        let newB = [];
+        for(let i = 0; i < board.length; i++){
+            newB[i] = []
+            for(let j = 0; j < board.length; j++){
+                if(board[i][j]){
+                    newB[i][j] = this.getPiecesFromLetters(board[i][j])
+                } else{
+                    board[i][j] = null;
+                }
+            }
+        }
+        console.log(newB)
+        return newB
+    }
+
+    getLetterFromPiece(obj){
+        let letters = ""
+        switch (obj.constructor.name) {
+            case "King":
+                letters = "K"
+                break;
+            case "Queen":
+                letters = "Q"
+                break;
+            case "Rock":
+                letters = "R"
+                break;
+            case "Bishop":
+                letters = "B"
+                break;
+            case "Knight":
+                letters = "H"
+                break;
+            case "Pawn":
+                letters = "P"
+                break;
+        }
+        if(obj.color === "white"){
+            letters = letters.concat("W")
+        } else {
+            letters = letters.concat("B")
+        }
+        return letters;
+    }
+
+    getPiecesFromLetters(letters, x, y, place, move) {
+        let color;
+        if(letters.charAt(1) === "W"){
+            color = "white"
+        } else {
+            color = "black"
+        }
+        switch (letters.charAt(0)) {
+            case "K":
+                return new King(x, y, color, this.place, this.move);
+                break;
+            case "Q":
+                return new Queen(x, y, color, this.place, this.move);
+                break;
+            case "R":
+                return new Rock(x, y, color, this.place, this.move);
+                break;
+            case "B":
+                return new Bishop(x, y, color, this.place, this.move);
+                break;
+            case "H":
+                return new Knight(x, y, color, this.place, this.move);
+                break;
+            case "P":
+                return new Pawn(x, y, color, this.place, this.move);
+                break;
+
+        }
     }
 }

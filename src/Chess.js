@@ -8,6 +8,7 @@ import { Knight } from './pieces/Knight'
 import { Pawn } from './pieces/Pawn'
 
 import { Evaluator } from './Evaluator'
+import { evaluateBoard } from './calculateMove'
 import CONSTANTS from './config'
 
 export class Chess {
@@ -15,9 +16,9 @@ export class Chess {
     constructor() {
         this.chessBoard = document.getElementById("chessBoard");
         this.context = chessBoard.getContext("2d");
+        this.evaluator = new Evaluator(this.place.bind(this), this.move.bind(this));
         this.board = this.createBoard()
-        this.evaluator = new Evaluator();
-
+        
         this.x = -1;
         this.y = -1;
         this.cur_x = -1
@@ -129,7 +130,7 @@ export class Chess {
             }
 
             if(type_move !== false){
-                this.score = this.evaluator.evaluateBoard(this.board).boardScore
+                this.score = evaluateBoard(this.evaluator.convertBoardFromUI(this.board)).bordScore
             }
         }
         this.x = -1;
@@ -139,9 +140,17 @@ export class Chess {
 
         if(this.turn % 2 === 1){
             console.log("thinking...")
+            /*var old_element = this.chessBoard;
+            var new_element = old_element.cloneNode(true);
+            
+            old_element.parentNode.replaceChild(new_element, old_element);
+            this.context = new_element.getContext("2d");
+            this.chessBoard = new_element
+            this.paintBoard()
+            this.placePieces()*/
             this.board = this.evaluator.getBestMove(this.board, 1, this.turn);
             this.turn++;
-            console.log(this.board)
+            console.log(this.board) 
         }
     }
 
