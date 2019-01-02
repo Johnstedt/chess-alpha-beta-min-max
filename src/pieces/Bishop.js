@@ -1,4 +1,6 @@
+import jQuery from 'jQuery'
 import { Piece } from './Piece'
+import {deepCopy} from './copyPiece'
 
 export class Bishop extends Piece {
 
@@ -76,15 +78,16 @@ export class Bishop extends Piece {
         x += xDir;
         y += yDir;
         while ( x >= 0 && y >= 0 && x <= 7 && y <= 7) {
-            console.log("loop " + x + " "+y)
             if (board[x][y]) {
 
                 if (board[x][y].color !== this.color) {
 
                     let p_score = score + this.getScoreChange(board[x][y])
-                    let p_board = JSON.parse(JSON.stringify(board));
-                    p_board[x][y] = p_board[this.x][y]
-                    p_board[this.x][y] = null;
+                    let p_board = deepCopy(board)
+                    p_board[x][y] = p_board[this.x][this.y]
+                    p_board[this.x][this.y] = null;
+                    p_board[x][y].x = x
+                    p_board[x][y].y = y
                     boards.push({
                         score: p_score,
                         board: p_board
@@ -93,9 +96,11 @@ export class Bishop extends Piece {
                 break;
             } else {
 
-                let p_board = JSON.parse(JSON.stringify(board));
-                p_board[x][y] = p_board[this.x][y]
-                p_board[this.x][y] = null;
+                let p_board = deepCopy(board)
+                p_board[x][y] = p_board[this.x][this.y]
+                p_board[this.x][this.y] = null;
+                p_board[x][y].x = x
+                p_board[x][y].y = y
                 boards.push({
                     score: score,
                     board: p_board

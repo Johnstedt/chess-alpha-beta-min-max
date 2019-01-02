@@ -46,6 +46,7 @@ export class Chess {
     place(x_old, y_old, x_new, y_new) {
 
         let temp = this.board[x_old][y_old]
+        console.log(temp)
 
         if (this.turn % 2 === 0 && temp.color === "white" || this.turn % 2 === 1 && temp.color === "black" ){
 
@@ -137,8 +138,12 @@ export class Chess {
         this.cur_x = -1
         this.cur_y = -1
 
-        this.evaluator.getBestMove(this.board, 4, this.turn);
-
+        if(this.turn % 2 === 1){
+            console.log("thinking...")
+            this.board = this.evaluator.getBestMove(this.board, 4, this.turn);
+            this.turn++;
+            console.log(this.board)
+        }
     }
 
     placePieces() {
@@ -147,10 +152,10 @@ export class Chess {
                 if (this.board[i][j] != null) {
 
                     if (this.x == i && this.y == j) {
-                        this.context.drawImage(this.board[i][j].getImage(), this.cur_x - (CONSTANTS.BOARD_SIZE / 16), this.cur_y - (CONSTANTS.BOARD_SIZE / 16), CONSTANTS.BOARD_SIZE / 8, CONSTANTS.BOARD_SIZE / 8);
+                        this.context.drawImage(this.getImage(this.board[i][j]), this.cur_x - (CONSTANTS.BOARD_SIZE / 16), this.cur_y - (CONSTANTS.BOARD_SIZE / 16), CONSTANTS.BOARD_SIZE / 8, CONSTANTS.BOARD_SIZE / 8);
                     }
                     else {
-                        this.context.drawImage(this.board[i][j].getImage(), (i) * CONSTANTS.BOARD_SIZE / 8, (7 - j) * CONSTANTS.BOARD_SIZE / 8, CONSTANTS.BOARD_SIZE / 8, CONSTANTS.BOARD_SIZE / 8);
+                        this.context.drawImage(this.getImage(this.board[i][j]), (i) * CONSTANTS.BOARD_SIZE / 8, (7 - j) * CONSTANTS.BOARD_SIZE / 8, CONSTANTS.BOARD_SIZE / 8, CONSTANTS.BOARD_SIZE / 8);
                     }
                 }
             }
@@ -158,63 +163,109 @@ export class Chess {
     }
 
     initiatePiecesForGame() {
-        this.createPiece(4, 0, "white", "king")
-        this.createPiece(4, 7, "black", "king")
-        this.createPiece(0, 0, "white", "rock")
-        this.createPiece(7, 0, "white", "rock")
-        this.createPiece(0, 7, "black", "rock")
-        this.createPiece(7, 7, "black", "rock")
-        this.createPiece(1, 0, "white", "knight")
-        this.createPiece(6, 0, "white", "knight")
-        this.createPiece(1, 7, "black", "knight")
-        this.createPiece(6, 7, "black", "knight")
-        this.createPiece(2, 0, "white", "bishop")
-        this.createPiece(5, 0, "white", "bishop")
-        this.createPiece(2, 7, "black", "bishop")
-        this.createPiece(5, 7, "black", "bishop")
-        this.createPiece(3, 0, "white", "queen")
-        this.createPiece(3, 7, "black", "queen")
+        this.createPiece(4, 0, "white", "King")
+        this.createPiece(4, 7, "black", "King")
+        this.createPiece(0, 0, "white", "Rock")
+        this.createPiece(7, 0, "white", "Rock")
+        this.createPiece(0, 7, "black", "Rock")
+        this.createPiece(7, 7, "black", "Rock")
+        this.createPiece(1, 0, "white", "Knight")
+        this.createPiece(6, 0, "white", "Knight")
+        this.createPiece(1, 7, "black", "Knight")
+        this.createPiece(6, 7, "black", "Knight")
+        this.createPiece(2, 0, "white", "Bishop")
+        this.createPiece(5, 0, "white", "Bishop")
+        this.createPiece(2, 7, "black", "Bishop")
+        this.createPiece(5, 7, "black", "Bishop")
+        this.createPiece(3, 0, "white", "Queen")
+        this.createPiece(3, 7, "black", "Queen")
 
-        this.createPiece(0, 1, "white", "pawn")
-        this.createPiece(1, 1, "white", "pawn")
-        this.createPiece(2, 1, "white", "pawn")
-        this.createPiece(3, 1, "white", "pawn")
-        this.createPiece(4, 1, "white", "pawn")
-        this.createPiece(5, 1, "white", "pawn")
-        this.createPiece(6, 1, "white", "pawn")
-        this.createPiece(7, 1, "white", "pawn")
-        this.createPiece(0, 6, "black", "pawn")
-        this.createPiece(1, 6, "black", "pawn")
-        this.createPiece(2, 6, "black", "pawn")
-        this.createPiece(3, 6, "black", "pawn")
-        this.createPiece(4, 6, "black", "pawn")
-        this.createPiece(5, 6, "black", "pawn")
-        this.createPiece(6, 6, "black", "pawn")
-        this.createPiece(7, 6, "black", "pawn")
+        this.createPiece(0, 1, "white", "Pawn")
+        this.createPiece(1, 1, "white", "Pawn")
+        this.createPiece(2, 1, "white", "Pawn")
+        this.createPiece(3, 1, "white", "Pawn")
+        this.createPiece(4, 1, "white", "Pawn")
+        this.createPiece(5, 1, "white", "Pawn")
+        this.createPiece(6, 1, "white", "Pawn")
+        this.createPiece(7, 1, "white", "Pawn")
+        this.createPiece(0, 6, "black", "Pawn")
+        this.createPiece(1, 6, "black", "Pawn")
+        this.createPiece(2, 6, "black", "Pawn")
+        this.createPiece(3, 6, "black", "Pawn")
+        this.createPiece(4, 6, "black", "Pawn")
+        this.createPiece(5, 6, "black", "Pawn")
+        this.createPiece(6, 6, "black", "Pawn")
+        this.createPiece(7, 6, "black", "Pawn")
     }
 
     createPiece(x, y, color, type) {
         switch (type) {
-            case "king":
+            case "King":
                 this.board[x][y] = new King(x, y, color, this.place.bind(this), this.move.bind(this));
                 break;
-            case "queen":
+            case "Queen":
                 this.board[x][y] = new Queen(x, y, color, this.place.bind(this), this.move.bind(this));
                 break;
-            case "rock":
+            case "Rock":
                 this.board[x][y] = new Rock(x, y, color, this.place.bind(this), this.move.bind(this));
                 break;
-            case "bishop":
+            case "Bishop":
                 this.board[x][y] = new Bishop(x, y, color, this.place.bind(this), this.move.bind(this));
                 break;
-            case "knight":
+            case "Knight":
                 this.board[x][y] = new Knight(x, y, color, this.place.bind(this), this.move.bind(this));
                 break;
-            case "pawn":
+            case "Pawn":
                 this.board[x][y] = new Pawn(x, y, color, this.place.bind(this), this.move.bind(this));
                 break;
 
         }
+    }
+
+    getImage(obj){
+
+        switch (obj.constructor.name) {
+            case "King":
+                return this.king[obj.color];
+                break;
+            case "Queen":
+                return this.queen[obj.color]
+                break;
+            case "Rock":
+                return this.rock[obj.color]
+                break;
+            case "Bishop":
+                return this.bishop[obj.color]
+                break;
+            case "Knight":
+                return this.knight[obj.color]
+                break;
+            case "Pawn":
+                return this.pawn[obj.color]
+                break;
+
+        }
+    }
+    getPieces(){
+        this.king = []
+        this.king["white"] = document.getElementById("king_white");
+        this.king["black"] = document.getElementById("king_black");
+        this.queen = []
+        this.queen["white"] = document.getElementById("queen_white");
+        this.queen["black"] = document.getElementById("queen_black");
+        this.knight = []
+        this.knight["white"] = document.getElementById("knight_white");
+        this.knight["black"] = document.getElementById("knight_black");
+        this.bishop = []
+        this.bishop["white"] = document.getElementById("bishop_white");
+        this.bishop["black"] = document.getElementById("bishop_black");
+        this.pawn = []
+        this.pawn["white"] = document.getElementById("pawn_white");
+        this.pawn["black"] = document.getElementById("pawn_black");
+        this.rock = []
+        this.rock["white"] = document.getElementById("rock_white");
+        this.rock["black"] = document.getElementById("rock_black");
+        
     }
 
     paintBoard() {
@@ -237,6 +288,7 @@ export class Chess {
     }
 
     createBoard() {
+        this.getPieces()
         let board = [];
         for (let i = 0; i < 8; i++) {
             board[i] = [];

@@ -1,4 +1,5 @@
 import { Piece } from './Piece'
+import {deepCopy} from './copyPiece'
 
 export class Rock extends Piece {
 
@@ -80,9 +81,11 @@ export class Rock extends Piece {
                 if (board[x][y].color !== this.color) {
 
                     let p_score = score + super.getScoreChange(board[x][y])
-                    let p_board = JSON.parse(JSON.stringify(board));
+                    let p_board = deepCopy(board)
                     p_board[x][y] = p_board[x][this.y]
                     p_board[x][this.y] = null;
+                    p_board[x][y].x = x
+                    p_board[x][y].y = y
                     boards.push({
                         score: p_score,
                         board: p_board
@@ -91,9 +94,11 @@ export class Rock extends Piece {
                 break;
             } else {
 
-                let p_board = JSON.parse(JSON.stringify(board));
+                let p_board = deepCopy(board)
                 p_board[x][y] = p_board[x][this.y]
                 p_board[x][this.y] = null;
+                p_board[x][y].x = x
+                p_board[x][y].y = y
                 boards.push({
                     score: score,
                     board: p_board
@@ -112,9 +117,11 @@ export class Rock extends Piece {
                 if (board[x][y].color !== this.color) {
 
                     let p_score = score + super.getScoreChange(board[x][y])
-                    let p_board = JSON.parse(JSON.stringify(board));
+                    let p_board = deepCopy(board)
                     p_board[x][y] = p_board[x][this.y]
                     p_board[x][this.y] = null;
+                    p_board[x][y].x = x
+                    p_board[x][y].y = y
                     boards.push({
                         score: p_score,
                         board: p_board
@@ -123,9 +130,11 @@ export class Rock extends Piece {
                 break;
             } else {
 
-                let p_board = JSON.parse(JSON.stringify(board));
+                let p_board = deepCopy(board)
                 p_board[x][y] = p_board[x][this.y]
                 p_board[x][this.y] = null;
+                p_board[x][y].x = x
+                p_board[x][y].y = y
                 boards.push({
                     score: score,
                     board: p_board
@@ -145,9 +154,11 @@ export class Rock extends Piece {
                 if (board[x][y].color !== this.color) {
 
                     let p_score = score + super.getScoreChange(board[x][y])
-                    let p_board = JSON.parse(JSON.stringify(board));
+                    let p_board = deepCopy(board)
                     p_board[x][y] = p_board[this.x][y]
                     p_board[this.x][y] = null;
+                    p_board[x][y].x = x
+                    p_board[x][y].y = y
                     boards.push({
                         score: p_score,
                         board: p_board
@@ -156,9 +167,11 @@ export class Rock extends Piece {
                 break;
             } else {
 
-                let p_board = JSON.parse(JSON.stringify(board));
+                let p_board = deepCopy(board)
                 p_board[x][y] = p_board[this.x][y]
                 p_board[this.x][y] = null;
+                p_board[x][y].x = x
+                p_board[x][y].y = y
                 boards.push({
                     score: score,
                     board: p_board
@@ -177,9 +190,11 @@ export class Rock extends Piece {
                 if (board[x][y].color !== this.color) {
 
                     let p_score = score + super.getScoreChange(board[x][y])
-                    let p_board = JSON.parse(JSON.stringify(board));
+                    let p_board = deepCopy(board)
                     p_board[x][y] = p_board[this.x][y]
                     p_board[this.x][y] = null;
+                    p_board[x][y].x = x
+                    p_board[x][y].y = y
                     boards.push({
                         score: p_score,
                         board: p_board
@@ -188,9 +203,11 @@ export class Rock extends Piece {
                 break;
             } else {
 
-                let p_board = JSON.parse(JSON.stringify(board));
+                let p_board = deepCopy(board)
                 p_board[x][y] = p_board[this.x][y]
                 p_board[this.x][y] = null;
+                p_board[x][y].x = x
+                p_board[x][y].y = y
                 boards.push({
                     score: score,
                     board: p_board

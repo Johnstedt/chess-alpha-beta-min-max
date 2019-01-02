@@ -1,4 +1,5 @@
 import { Piece } from './Piece'
+import {deepCopy} from './copyPiece'
 
 export class Queen extends Piece {
 
@@ -124,9 +125,11 @@ export class Queen extends Piece {
                 if (board[x][y].color !== this.color) {
 
                     let p_score = score + super.getScoreChange(board[x][y])
-                    let p_board = JSON.parse(JSON.stringify(board));
-                    p_board[x][y] = p_board[x][this.y]
-                    p_board[x][this.y] = null;
+                    let p_board = deepCopy(board)
+                    p_board[x][y] = p_board[this.x][this.y]
+                    p_board[this.x][this.y] = null;
+                    p_board[x][y].x = x
+                    p_board[x][y].y = y
                     boards.push({
                         score: p_score,
                         board: p_board
@@ -135,9 +138,11 @@ export class Queen extends Piece {
                 break;
             } else {
 
-                let p_board = JSON.parse(JSON.stringify(board));
-                p_board[x][y] = p_board[x][this.y]
-                p_board[x][this.y] = null;
+                let p_board = deepCopy(board)
+                p_board[x][y] = p_board[this.x][this.y]
+                p_board[this.x][this.y] = null;
+                p_board[x][y].x = x
+                p_board[x][y].y = y
                 boards.push({
                     score: score,
                     board: p_board
@@ -156,9 +161,11 @@ export class Queen extends Piece {
                 if (board[x][y].color !== this.color) {
 
                     let p_score = score + super.getScoreChange(board[x][y])
-                    let p_board = JSON.parse(JSON.stringify(board));
-                    p_board[x][y] = p_board[x][this.y]
-                    p_board[x][this.y] = null;
+                    let p_board = deepCopy(board)
+                    p_board[x][y] = p_board[this.x][this.y]
+                    p_board[this.x][this.y] = null;
+                    p_board[x][y].x = x
+                    p_board[x][y].y = y
                     boards.push({
                         score: p_score,
                         board: p_board
@@ -167,9 +174,11 @@ export class Queen extends Piece {
                 break;
             } else {
 
-                let p_board = JSON.parse(JSON.stringify(board));
-                p_board[x][y] = p_board[x][this.y]
-                p_board[x][this.y] = null;
+                let p_board = deepCopy(board)
+                p_board[x][y] = p_board[this.x][this.y]
+                p_board[this.x][this.y] = null;
+                p_board[x][y].x = x
+                p_board[x][y].y = y
                 boards.push({
                     score: score,
                     board: p_board
@@ -189,9 +198,11 @@ export class Queen extends Piece {
                 if (board[x][y].color !== this.color) {
 
                     let p_score = score + super.getScoreChange(board[x][y])
-                    let p_board = JSON.parse(JSON.stringify(board));
-                    p_board[x][y] = p_board[this.x][y]
-                    p_board[this.x][y] = null;
+                    let p_board = deepCopy(board)
+                    p_board[x][y] = p_board[this.x][this.y]
+                    p_board[this.x][this.y] = null;
+                    p_board[x][y].x = x
+                    p_board[x][y].y = y;
                     boards.push({
                         score: p_score,
                         board: p_board
@@ -200,9 +211,11 @@ export class Queen extends Piece {
                 break;
             } else {
 
-                let p_board = JSON.parse(JSON.stringify(board));
-                p_board[x][y] = p_board[this.x][y]
-                p_board[this.x][y] = null;
+                let p_board = deepCopy(board)
+                p_board[x][y] = p_board[this.x][this.y]
+                p_board[this.x][this.y] = null;
+                p_board[x][y].x = x
+                p_board[x][y].y = y
                 boards.push({
                     score: score,
                     board: p_board
@@ -221,9 +234,11 @@ export class Queen extends Piece {
                 if (board[x][y].color !== this.color) {
 
                     let p_score = score + super.getScoreChange(board[x][y])
-                    let p_board = JSON.parse(JSON.stringify(board));
-                    p_board[x][y] = p_board[this.x][y]
-                    p_board[this.x][y] = null;
+                    let p_board = deepCopy(board)
+                    p_board[x][y] = p_board[this.x][this.y]
+                    p_board[this.x][this.y] = null;
+                    p_board[x][y].x = x
+                    p_board[x][y].y = y
                     boards.push({
                         score: p_score,
                         board: p_board
@@ -232,9 +247,11 @@ export class Queen extends Piece {
                 break;
             } else {
 
-                let p_board = JSON.parse(JSON.stringify(board));
-                p_board[x][y] = p_board[this.x][y]
-                p_board[this.x][y] = null;
+                let p_board = deepCopy(board)
+                p_board[x][y] = p_board[this.x][this.y]
+                p_board[this.x][this.y] = null;
+                p_board[x][y].x = x
+                p_board[x][y].y = y
                 boards.push({
                     score: score,
                     board: p_board
@@ -243,11 +260,11 @@ export class Queen extends Piece {
         }
         return boards;
 
-   }
+    } 
 
-   getFromDirection(board, boards, score, xDir, yDir){
-       let x = this.x;
-       let y = this.y;
+    getFromDirection(board, boards, score, xDir, yDir){
+        let x = this.x;
+        let y = this.y;
 
        x += xDir;
        y += yDir;
@@ -258,9 +275,11 @@ export class Queen extends Piece {
                if (board[x][y].color !== this.color) {
 
                    let p_score = score + this.getScoreChange(board[x][y])
-                   let p_board = JSON.parse(JSON.stringify(board));
-                   p_board[x][y] = p_board[this.x][y]
-                   p_board[this.x][y] = null;
+                   let p_board = deepCopy(board)
+                   p_board[x][y] = p_board[this.x][this.y]
+                   p_board[this.x][this.y] = null;
+                   p_board[x][y].x = x
+                   p_board[x][y].y = y
                    boards.push({
                        score: p_score,
                        board: p_board
@@ -269,9 +288,11 @@ export class Queen extends Piece {
                break;
            } else {
 
-               let p_board = JSON.parse(JSON.stringify(board));
-               p_board[x][y] = p_board[this.x][y]
-               p_board[this.x][y] = null;
+               let p_board = deepCopy(board)
+               p_board[x][y] = p_board[this.x][this.y]
+               p_board[this.x][this.y] = null;
+               p_board[x][y].x = x
+               p_board[x][y].y = y
                boards.push({
                    score: score,
                    board: p_board
@@ -281,6 +302,4 @@ export class Queen extends Piece {
            y += yDir;
        }
    }
-
-
 }

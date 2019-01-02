@@ -49,8 +49,19 @@ export class Evaluator {
 
     getBestMove(board, depth, turn){
         let obj = this.evaluateBoard(board)
-        this.getAllLegalMoves(board, obj.blackPieces, obj.boardScore)
-        
+        let boards = this.getAllLegalMoves(board, obj.blackPieces, obj.boardScore)
+
+        let worstScore = 80;
+        let winning = null
+
+        for(let i = 0; i < boards.length; i++){
+            
+            if(boards[i].score < worstScore){
+                winning = boards[i]
+                worstScore = boards[i].score
+            }
+        }
+        return winning.board
     }
 
     getAllLegalMoves(board, pieces, score){
@@ -59,5 +70,6 @@ export class Evaluator {
             boards = boards.concat(pieces[i].getAllLegalMoves(board, score))
         }
         console.log(boards)
+        return boards
     }
 }
