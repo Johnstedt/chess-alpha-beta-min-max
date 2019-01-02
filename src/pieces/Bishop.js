@@ -1,4 +1,3 @@
-import jQuery from 'jQuery'
 import { Piece } from './Piece'
 import {deepCopy} from './copyPiece'
 

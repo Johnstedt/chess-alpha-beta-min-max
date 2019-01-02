@@ -99,5 +99,4 @@ export class Piece {
                 return 40;
         }
     }
-    
 }

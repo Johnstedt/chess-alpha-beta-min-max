@@ -46,7 +46,6 @@ export class Chess {
     place(x_old, y_old, x_new, y_new) {
 
         let temp = this.board[x_old][y_old]
-        console.log(temp)
 
         if (this.turn % 2 === 0 && temp.color === "white" || this.turn % 2 === 1 && temp.color === "black" ){
 
@@ -140,7 +139,7 @@ export class Chess {
 
         if(this.turn % 2 === 1){
             console.log("thinking...")
-            this.board = this.evaluator.getBestMove(this.board, 4, this.turn);
+            this.board = this.evaluator.getBestMove(this.board, 1, this.turn);
             this.turn++;
             console.log(this.board)
         }
