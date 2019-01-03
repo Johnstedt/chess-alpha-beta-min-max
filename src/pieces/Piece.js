@@ -40,6 +40,7 @@ export class Piece {
         this.currentY = -1;
 
         this.board.addEventListener("mousedown", function (e) {
+
             var mouseX = e.pageX - this.offsetLeft;
             var mouseY = e.pageY - this.offsetTop;
 
@@ -60,7 +61,6 @@ export class Piece {
 
         this.board.addEventListener("mouseout", function (e) {
             if(self.isDraggable){
-
                 self.place(self.x, self.y, self.x, self.y)
                 self.isDraggable = false;
             }

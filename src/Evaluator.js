@@ -40,12 +40,10 @@ export class Evaluator {
 
     getBestMoveRec(board, depth, turn) {
         
-        
         var boards = [];
         var tempBoards = [];
         
         boards = calculateMove(board, turn)
-        
         
         let firstBoard = [];
         let worstScore;
@@ -54,15 +52,10 @@ export class Evaluator {
         if(depth > 0){
             for (let i = 0; i < boards.length; i++) {
                 firstBoard[i] = JSON.parse(JSON.stringify(boards[i].board))
-                console.log(i)
+                
                 tempBoards.push(this.getBestMoveRec(boards[i].board, depth -1, turn +1))
             }
             boards = tempBoards;
-        }
-        
-        if(depth > 0){
-            console.log("HERE")
-            console.log(boards)
         }
 
         if (turn % 2 === 1) { //MIN
@@ -86,9 +79,7 @@ export class Evaluator {
                 }
             }
         }
-        if(depth > 0){
-            console.log("Finaley")
-            console.log(firstBoard[winning])
+        if(depth == 4){
             return firstBoard[winning]
         } else {
             return boards[winning];
@@ -125,13 +116,12 @@ export class Evaluator {
             newB[i] = []
             for(let j = 0; j < board.length; j++){
                 if(board[i][j]){
-                    newB[i][j] = this.getPiecesFromLetters(board[i][j])
+                    newB[i][j] = this.getPiecesFromLetters(board[i][j], i, j)
                 } else{
                     board[i][j] = null;
                 }
             }
         }
-        console.log(newB)
         return newB
     }
 
@@ -165,7 +155,7 @@ export class Evaluator {
         return letters;
     }
 
-    getPiecesFromLetters(letters, x, y, place, move) {
+    getPiecesFromLetters(letters, x, y) {
         let color;
         if(letters.charAt(1) === "W"){
             color = "white"
