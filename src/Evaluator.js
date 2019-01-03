@@ -57,12 +57,13 @@ export class Evaluator {
             }
             boards = tempBoards;
         }
-
+        
         if (turn % 2 === 1) { //MIN
-            worstScore = 2000;
+            worstScore = 200000;
             winning = null
 
             for (let i = 0; i < boards.length; i++) {
+
                 if (boards[i].score < worstScore) {
                     winning = i
                     worstScore = boards[i].score
@@ -70,7 +71,7 @@ export class Evaluator {
             }
         }
         else { // MAX
-            worstScore = -2000;
+            worstScore = -200000;
             winning = null
             for (let i = 0; i < boards.length; i++) {
                 if (boards[i].score > worstScore) {
@@ -79,7 +80,7 @@ export class Evaluator {
                 }
             }
         }
-        if(depth == 4){
+        if(depth == 3){
             return firstBoard[winning]
         } else {
             return boards[winning];

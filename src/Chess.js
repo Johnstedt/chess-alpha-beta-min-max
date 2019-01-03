@@ -130,6 +130,8 @@ export class Chess {
             }
 
             if(type_move !== false){
+                console.log("HERE")
+                console.log(this.evaluator.convertBoardFromUI(this.board))
                 this.score = evaluateBoard(this.evaluator.convertBoardFromUI(this.board)).bordScore
             }
         }
@@ -148,7 +150,13 @@ export class Chess {
             this.chessBoard = new_element
             this.paintBoard()
             this.placePieces()
-            this.board = this.evaluator.getBestMove(this.board, 4, this.turn);
+            this.board = this.evaluator.getBestMove(this.board, 3, this.turn);
+            console.log(this.evaluator.convertBoardFromUI(this.board))
+            console.log( evaluateBoard(this.evaluator.convertBoardFromUI(this.board)).boardScore )
+            console.log(this.score)
+            this.scoreYEE = ( evaluateBoard(this.evaluator.convertBoardFromUI(this.board)).bordScore )
+            console.log(this)
+            console.log(this.score)
             this.turn++;
         }
     }

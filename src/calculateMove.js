@@ -67,19 +67,22 @@ const pawnBoard = [
 
 function getPieceValue(piece, x, y) {
     let val = 0;
+    if(piece.charAt(1) == "B"){
+        y = 7 - y
+    }
     switch (piece.charAt(0)) {
         case "P":
             val = 10 + pawnBoard[x][y];
         case "H":
             val = 30 + knightBoard[x][y];
         case "B":
-            val = 30;
+            val = 30 + bishopBoard[x][y];
         case "R":
-            val = 50;
+            val = 50 + rockBoard[x][y];
         case "Q":
-            val = 90;
+            val = 90 + queenBoard[x][y];
         case "K":
-            val = 10000;
+            val = 10000 + kingBoard[x][y];
     }
     if (piece.charAt(1) == "W") {
         return val
@@ -100,10 +103,10 @@ export function evaluateBoard(board) {
             if (board[i][j]) {
                 if (board[i][j].charAt(1) === "W") {
                     whitePieces.push({ x: i, y: j })
-                    whiteScore += getPieceValue(board[i][j])
+                    whiteScore += getPieceValue(board[i][j], i, j)
                 } else {
                     blackPieces.push({ x: i, y: j })
-                    blackScore += getPieceValue(board[i][j])
+                    blackScore += getPieceValue(board[i][j], i, j)
                 }
             }
         }
@@ -215,7 +218,7 @@ function allPawnMoves(boar, old_x, old_y) {
     let y2;
     let dir;
 
-    if (board[old_x][old_y] === "W") {
+    if (board[old_x][old_y].charAt(1) === "W") {
         y = old_y + 1;
         y2 = old_y + 2
     } else {
@@ -230,8 +233,9 @@ function allPawnMoves(boar, old_x, old_y) {
             let p_board = JSON.parse(JSON.stringify(board));
             p_board[x][y] = p_board[old_x][old_y]
             p_board[old_x][old_y] = null;
+            
             boards.push({
-                score: score,
+                score: score - getPieceValue(p_board[x][y], old_x, old_y) + getPieceValue(p_board[x][y], x, y),
                 board: p_board
             });
 
@@ -241,12 +245,12 @@ function allPawnMoves(boar, old_x, old_y) {
         if (x <= 7) {
             if (board[x][y]) {
                 if (board[x][y].charAt(1) !== board[old_x][old_y].charAt(1)) {
-                    let p_score = score + getPieceValue(board[x][y])
+                    let p_score = score - getPieceValue(board[x][y], x, y)
                     let p_board = JSON.parse(JSON.stringify(board));
                     p_board[x][y] = p_board[old_x][old_y]
                     p_board[old_x][old_y] = null;
                     boards.push({
-                        score: p_score,
+                        score: p_score - getPieceValue(p_board[x][y], old_x, old_y) + getPieceValue(p_board[x][y], x, y),
                         board: p_board
                     });
                 }
@@ -258,12 +262,12 @@ function allPawnMoves(boar, old_x, old_y) {
             if (board[x][y]) {
                 if (board[x][y].charAt(1) !== board[old_x][old_y].charAt(1)) {
 
-                    let p_score = score + getPieceValue(board[x][y])
+                    let p_score = score - getPieceValue(board[x][y], x, y)
                     let p_board = JSON.parse(JSON.stringify(board));
                     p_board[x][y] = p_board[old_x][old_y]
                     p_board[old_x][old_y] = null;
                     boards.push({
-                        score: p_score,
+                        score: p_score - getPieceValue(p_board[x][y], old_x, old_y) + getPieceValue(p_board[x][y], x, y),
                         board: p_board
                     });
                 }
@@ -279,13 +283,13 @@ function allPawnMoves(boar, old_x, old_y) {
             p_board[x][y2] = p_board[old_x][old_y]
             p_board[old_x][old_y] = null;
             boards.push({
-                score: score,
+                score: score - getPieceValue(p_board[x][y2], old_x, old_y) + getPieceValue(p_board[x][y2], x, y2),
                 board: p_board
             });
 
         }
     }
-    
+
     return boards;
 }
 
@@ -297,12 +301,12 @@ function tryMove(board, boards, score, old_x, old_y, x, y) {
 
             if (board[x][y].charAt(1) !== board[old_x][old_y].charAt(1)) {
 
-                let p_score = score + getPieceValue(board[x][y])
+                let p_score = score - getPieceValue(board[x][y], x, y)
                 let p_board = JSON.parse(JSON.stringify(board))
                 p_board[x][y] = p_board[old_x][old_y]
                 p_board[old_x][old_y] = null;
                 boards.push({
-                    score: p_score,
+                    score: p_score - getPieceValue(p_board[x][y], old_x, old_y) + getPieceValue(p_board[x][y], x, y),
                     board: p_board
                 });
             }
@@ -312,7 +316,7 @@ function tryMove(board, boards, score, old_x, old_y, x, y) {
             p_board[x][y] = p_board[old_x][old_y]
             p_board[old_x][old_y] = null;
             boards.push({
-                score: score,
+                score: score - getPieceValue(p_board[x][y], old_x, old_y) + getPieceValue(p_board[x][y], x, y),
                 board: p_board
             });
         }
@@ -330,12 +334,12 @@ function getFromDirection(board, boards, score, xDir, yDir, old_x, old_y) {
 
             if (board[x][y].charAt(1) !== board[old_x][old_y].charAt(1)) {
 
-                let p_score = score + getPieceValue(board[x][y])
+                let p_score = score + getPieceValue(board[x][y], x, y)
                 let p_board = JSON.parse(JSON.stringify(board))
                 p_board[x][y] = p_board[old_x][old_y]
                 p_board[old_x][old_y] = null;
                 boards.push({
-                    score: p_score,
+                    score: p_score - getPieceValue(p_board[x][y], old_x, old_y) + getPieceValue(p_board[x][y], x, y),
                     board: p_board
                 });
             }
@@ -346,7 +350,7 @@ function getFromDirection(board, boards, score, xDir, yDir, old_x, old_y) {
             p_board[x][y] = p_board[old_x][old_y]
             p_board[old_x][old_y] = null;
             boards.push({
-                score: score,
+                score: score - getPieceValue(p_board[x][y], old_x, old_y) + getPieceValue(p_board[x][y], x, y),
                 board: p_board
             });
         }
