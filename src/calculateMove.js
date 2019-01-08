@@ -67,28 +67,33 @@ const pawnBoard = [
 
 function getPieceValue(piece, x, y) {
     let val = 0;
+    let m = 1
     if(piece.charAt(1) == "B"){
         y = 7 - y
+        m = -1
     }
     switch (piece.charAt(0)) {
         case "P":
-            val = 10 + pawnBoard[x][y];
+            val = (m * 10) + (m * pawnBoard[x][y]);
+            break;
         case "H":
-            val = 30 + knightBoard[x][y];
+            val = (m * 30) + (m * knightBoard[x][y]);
+            break;
         case "B":
-            val = 30 + bishopBoard[x][y];
+            val = (m * 30) + (m * bishopBoard[x][y]);
+            break;
         case "R":
-            val = 50 + rockBoard[x][y];
+            val = (m * 50) + (m * rockBoard[x][y]);
+            break;
         case "Q":
-            val = 90 + queenBoard[x][y];
+            val = (m * 90) + (m * queenBoard[x][y]);
+            break;
         case "K":
-            val = 10000 + kingBoard[x][y];
+            val = (m * 10000) + (m * kingBoard[x][y]);
+            break;
     }
-    if (piece.charAt(1) == "W") {
-        return val
-    } else {
-        return 0 - val;
-    }
+    
+  return val;
 }
 
 export function evaluateBoard(board) {
@@ -227,7 +232,6 @@ function allPawnMoves(boar, old_x, old_y) {
     }
 
     if (y >= 0 && y <= 7) {
-
         x = old_x;
         if (!board[x][y]) {
             let p_board = JSON.parse(JSON.stringify(board));
@@ -238,7 +242,6 @@ function allPawnMoves(boar, old_x, old_y) {
                 score: score - getPieceValue(p_board[x][y], old_x, old_y) + getPieceValue(p_board[x][y], x, y),
                 board: p_board
             });
-
         }
 
         x = old_x + 1;

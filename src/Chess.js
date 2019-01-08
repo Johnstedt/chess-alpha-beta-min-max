@@ -151,6 +151,7 @@ export class Chess {
             this.paintBoard()
             this.placePieces()
             this.board = this.evaluator.getBestMove(this.board, 3, this.turn);
+            
             console.log(this.evaluator.convertBoardFromUI(this.board))
             console.log( evaluateBoard(this.evaluator.convertBoardFromUI(this.board)).boardScore )
             console.log(this.score)
